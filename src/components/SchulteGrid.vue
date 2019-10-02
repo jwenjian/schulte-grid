@@ -109,6 +109,7 @@ export default {
           this.expected = 1;
           this.shuffle();
           this.reset = !this.reset;
+          this.circleColor = "white";
         });
       }
     }
