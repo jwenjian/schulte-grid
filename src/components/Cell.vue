@@ -76,5 +76,6 @@ export default {
 .cell-num-wrapper>span {
     display: inline-block;
     padding-top: 45%;
+    font-size: xxx-large;
 }
 </style>
