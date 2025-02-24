@@ -72,10 +72,12 @@ export default {
 .cell-num-wrapper {
     height: 100%;
     width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .cell-num-wrapper>span {
     display: inline-block;
-    padding-top: 45%;
     font-size: xxx-large;
 }
 </style>
