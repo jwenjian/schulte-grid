@@ -39,6 +39,11 @@ const failSound = new Howl({
   src: ["/fail.mp3"]
 });
 
+const clickSound = new Howl({
+  src: ["/click.mp3"],
+  volume: 0.5
+});
+
 export default {
   name: "schulte-grid",
   components: {
@@ -109,6 +114,7 @@ export default {
         this.startTime = Date.now();
       }
       this.expected += 1;
+      clickSound.play();
       this.currentRate = (this.expected - 1) * 4;
       if (this.expected === 26) {
         this.endTime = Date.now();
