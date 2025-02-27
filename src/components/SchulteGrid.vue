@@ -16,12 +16,19 @@
         </van-grid-item>
       </template>
     </van-grid>
+    <van-dialog v-model="successDialogVisible" title="Congratulations!!!" @confirm="handleSuccessConfirm">
+      <img src="/cup.gif" style="width: 100%;"/>
+    </van-dialog>
+    <van-dialog v-model="failedDialogVisible" title="Aww Ooo..!!!" @confirm="handleFailedConfirm">
+      <img src="/cry.gif" style="width: 100%;"/>
+    </van-dialog>
   </div>
 </template>
 
 <script>
 import { Grid, GridItem, Dialog, Circle } from "vant";
 import Cell from "./Cell";
+import confetti from "canvas-confetti";
 
 export default {
   name: "schulte-grid",
@@ -29,7 +36,8 @@ export default {
     [Grid.name]: Grid,
     [GridItem.name]: GridItem,
     Cell: Cell,
-    [Circle.name]: Circle
+    [Circle.name]: Circle,
+    [Dialog.Component.name]: Dialog.Component
   },
   data() {
     return {
@@ -42,7 +50,9 @@ export default {
       endTime: null,
       reset: false,
       currentRate: 0,
-      circleColor: "whilte"
+      circleColor: "white",
+      successDialogVisible: false,
+      failedDialogVisible: false
     };
   },
   methods: {
@@ -80,15 +90,7 @@ export default {
     },
     stopAndShowErrorMsg(payload) {
       this.circleColor = "#ec407a";
-      Dialog.alert({
-        title: "Wrong",
-        message: `expect ${payload.expected}, but got ${payload.num}.\n\nGo play again!`
-      }).then(() => {
-        this.expected = 1;
-        this.shuffle();
-        this.reset = !this.reset;
-        this.circleColor = "white";
-      });
+      this.failedDialogVisible = true;
     },
     increaseExpected() {
       this.circleColor = "#00897b";
@@ -102,16 +104,37 @@ export default {
         this.endTime = Date.now();
         let duration = (this.endTime - this.startTime) / 1000;
         // finished success
-        Dialog.alert({
-          title: "Congratulations!!!",
-          message: `It takes you ${duration}s, you can do better!`
-        }).then(() => {
-          this.expected = 1;
-          this.shuffle();
-          this.reset = !this.reset;
-          this.circleColor = "white";
-        });
+        this.successDialogVisible = true;
+        this.showConfetti();
       }
+    },
+    showConfetti() {
+      for (let i = 0; i < 3; i++) {
+        confetti({
+          particleCount: 100,
+          startVelocity: 30,
+          spread: 360,
+          origin: {
+            x: Math.random() * 0.5 + 0.25,
+            // since they fall down, start a bit higher than random
+            y: 0.3
+          }
+      });
+      }
+    },
+    handleSuccessConfirm() {
+      this.successDialogVisible = false;
+      this.expected = 1;
+      this.shuffle();
+      this.reset = !this.reset;
+      this.circleColor = "white";
+    },
+    handleFailedConfirm() {
+      this.failedDialogVisible = false;
+      this.expected = 1;
+      this.shuffle();
+      this.reset = !this.reset;
+      this.circleColor = "white";
     }
   },
   mounted() {
