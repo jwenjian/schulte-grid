@@ -29,6 +29,15 @@
 import { Grid, GridItem, Dialog, Circle } from "vant";
 import Cell from "./Cell";
 import confetti from "canvas-confetti";
+import { Howl, Howler } from "howler";
+
+const successSound = new Howl({
+  src: ["/success.mp3"]
+});
+
+const failSound = new Howl({
+  src: ["/fail.mp3"]
+});
 
 export default {
   name: "schulte-grid",
@@ -90,6 +99,7 @@ export default {
     },
     stopAndShowErrorMsg(payload) {
       this.circleColor = "#ec407a";
+      failSound.play();
       this.failedDialogVisible = true;
     },
     increaseExpected() {
@@ -104,6 +114,7 @@ export default {
         this.endTime = Date.now();
         let duration = (this.endTime - this.startTime) / 1000;
         // finished success
+        successSound.play();
         this.successDialogVisible = true;
         this.showConfetti();
       }
