@@ -3,7 +3,7 @@
     <van-circle v-model="currentRate" :color="circleColor" size="150px">
       <img alt="Grid logo" src="../assets/grid.png" class="logo"/>
     </van-circle>
-    <van-grid :column-num="5" :gutter="5" :square="true" class="grid-wrapper">
+    <van-grid :column-num="6" :gutter="5" :square="true" class="grid-wrapper">
       <template v-for="cell_data in grid_data">
         <van-grid-item :key="cell_data">
           <Cell
@@ -44,6 +44,64 @@ const clickSound = new Howl({
   volume: 0.5
 });
 
+const original = [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z'
+      ];
+
+const hub = [
+        'A',
+        'B',
+        'C',
+        'D',
+        'E',
+        'F',
+        'G',
+        'H',
+        'I',
+        'J',
+        'K',
+        'L',
+        'M',
+        'N',
+        'O',
+        'P',
+        'Q',
+        'R',
+        'S',
+        'T',
+        'U',
+        'V',
+        'W',
+        'X',
+        'Y',
+        'Z'
+      ];
+
 export default {
   name: "schulte-grid",
   components: {
@@ -59,45 +117,19 @@ export default {
       time_in_ms: 0,
       last_number: 0,
       grid_data: [],
-      expected: 1,
+      expected: 'A',
       startTime: null,
       endTime: null,
       reset: false,
       currentRate: 0,
       circleColor: "white",
       successDialogVisible: false,
-      failedDialogVisible: false
+      failedDialogVisible: false,
+      idx: 0
     };
   },
   methods: {
     shuffle() {
-      let hub = [
-        1,
-        2,
-        3,
-        4,
-        5,
-        6,
-        7,
-        8,
-        9,
-        10,
-        11,
-        12,
-        13,
-        14,
-        15,
-        16,
-        17,
-        18,
-        19,
-        20,
-        21,
-        22,
-        23,
-        24,
-        25
-      ];
       // eslint-disable-next-line
       hub.sort((a, b) => (Math.random() > 0.5 ? -1 : 1));
       this.grid_data = hub;
@@ -109,14 +141,15 @@ export default {
     },
     increaseExpected() {
       this.circleColor = "#00897b";
-      if (this.expected === 1) {
+      if (this.expected === 'A') {
         // first time,start to timer
         this.startTime = Date.now();
       }
-      this.expected += 1;
+      this.idx += 1;
+      this.expected = original[this.idx];
       clickSound.play();
-      this.currentRate = (this.expected - 1) * 4;
-      if (this.expected === 26) {
+      this.currentRate = (this.idx) * 4;
+      if (this.idx === 26) {
         this.endTime = Date.now();
         let duration = (this.endTime - this.startTime) / 1000;
         // finished success
@@ -141,14 +174,16 @@ export default {
     },
     handleSuccessConfirm() {
       this.successDialogVisible = false;
-      this.expected = 1;
+      this.idx = 0;
+      this.expected = original[this.idx];
       this.shuffle();
       this.reset = !this.reset;
       this.circleColor = "white";
     },
     handleFailedConfirm() {
       this.failedDialogVisible = false;
-      this.expected = 1;
+      this.idx = 0
+      this.expected = original[this.idx];
       this.shuffle();
       this.reset = !this.reset;
       this.circleColor = "white";
