@@ -1,5 +1,7 @@
 <template>
   <div id="app">
+    <h3>QWERTY 键盘布局 + 字母记忆游戏</h3>
+    <h5>从 A 到 Z 依次按下字母即可</h5>
     <schulte-grid></schulte-grid>
   </div>
 </template>

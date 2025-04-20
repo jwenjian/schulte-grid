@@ -3,8 +3,34 @@
     <van-circle v-model="currentRate" :color="circleColor" size="150px">
       <img alt="Grid logo" src="../assets/grid.png" class="logo"/>
     </van-circle>
-    <van-grid :column-num="6" :gutter="5" :square="true" class="grid-wrapper">
-      <template v-for="cell_data in grid_data">
+    <van-grid :column-num="10" :square="true" class="grid-wrapper">
+      <template v-for="cell_data in grid_data_1">
+        <van-grid-item :key="cell_data">
+          <Cell
+            :num="cell_data"
+            :expected="expected"
+            @wrong="stopAndShowErrorMsg"
+            @correct="increaseExpected"
+            :reset-flag="reset"
+          />
+        </van-grid-item>
+      </template>
+    </van-grid>
+    <van-grid :column-num="9" :square="true" class="grid-wrapper line2">
+      <template v-for="cell_data in grid_data_2">
+        <van-grid-item :key="cell_data">
+          <Cell
+            :num="cell_data"
+            :expected="expected"
+            @wrong="stopAndShowErrorMsg"
+            @correct="increaseExpected"
+            :reset-flag="reset"
+          />
+        </van-grid-item>
+      </template>
+    </van-grid>
+    <van-grid :column-num="7" :square="true" class="grid-wrapper line3">
+      <template v-for="cell_data in grid_data_3">
         <van-grid-item :key="cell_data">
           <Cell
             :num="cell_data"
@@ -43,65 +69,16 @@ const clickSound = new Howl({
   src: ["/click.mp3"],
   volume: 0.5
 });
-
 const original = [
-        'A',
-        'B',
-        'C',
-        'D',
-        'E',
-        'F',
-        'G',
-        'H',
-        'I',
-        'J',
-        'K',
-        'L',
-        'M',
-        'N',
-        'O',
-        'P',
-        'Q',
-        'R',
-        'S',
-        'T',
-        'U',
-        'V',
-        'W',
-        'X',
-        'Y',
-        'Z'
-      ];
+  'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M',
+  'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'
+];
 
 const hub = [
-        'A',
-        'B',
-        'C',
-        'D',
-        'E',
-        'F',
-        'G',
-        'H',
-        'I',
-        'J',
-        'K',
-        'L',
-        'M',
-        'N',
-        'O',
-        'P',
-        'Q',
-        'R',
-        'S',
-        'T',
-        'U',
-        'V',
-        'W',
-        'X',
-        'Y',
-        'Z'
-      ];
-
+  'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P',
+  'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L',
+  'Z', 'X', 'C', 'V', 'B', 'N', 'M'
+];
 export default {
   name: "schulte-grid",
   components: {
@@ -131,7 +108,6 @@ export default {
   methods: {
     shuffle() {
       // eslint-disable-next-line
-      hub.sort((a, b) => (Math.random() > 0.5 ? -1 : 1));
       this.grid_data = hub;
     },
     stopAndShowErrorMsg(payload) {
@@ -189,6 +165,17 @@ export default {
       this.circleColor = "white";
     }
   },
+  computed: {
+    grid_data_1() {
+      return this.grid_data.slice(0, 10)
+    },
+    grid_data_2() {
+      return this.grid_data.slice(10, 19)
+    },
+    grid_data_3() {
+      return this.grid_data.slice(19, 26)
+    }
+  },
   mounted() {
     this.shuffle();
     this.reset = !this.reset;
@@ -218,5 +205,13 @@ export default {
 }
 .grid-wrapper {
     padding-top: 10px;
+}
+.line2 {
+    width: 90%;
+    margin: auto;
+}
+.line3 {
+    width: 80%;
+    margin: auto;
 }
 </style>
